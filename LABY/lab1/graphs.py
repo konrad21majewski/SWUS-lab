@@ -1,4 +1,6 @@
+import os
 import matplotlib.pyplot as plt
+from data import get_data
 
 # Function to extract phi and buffer values from file name
 def extract_values(file_name):
@@ -7,51 +9,80 @@ def extract_values(file_name):
     return buffer_value, phi_value
 
 # Data from the provided text files
-file_data = {
-    "B10": [
-        (1050, 0.000206803),
-        (1080, 0.000185114),
-        (1095, 0.000207183),
-    ],
-    "B30": [
-        (3050, 0.00020668),
-        (3080, 0.000185977),
-        (3095, 0.000170091),
-    ],
-    "B100": [
-        (10050, 0.000204663),
-        (10080, 0.000203402),
-        (10095, 0.000172319),
-    ],
-}
 
-# Extracting and plotting minIPDT values only from cbr files
-for buff_type, data in file_data.items():
-    buffer_values = []
-    phi_values = []
-    minIPDT_values = []
+# file_data = {
+#     "B10": [
+#         (1050, 0.000206803),
+#         (1080, 0.000185114),
+#         (1095, 0.000207183),
+#     ],
+#     "B30": [
+#         (3050, 0.00020668),
+#         (3080, 0.000185977),
+#         (3095, 0.000170091),
+#     ],
+#     "B100": [
+#         (10050, 0.000204663),
+#         (10080, 0.000203402),
+#         (10095, 0.000172319),
+#     ],
+# }
 
-    for buffer, minIPDT in data:
-        file_name = f'cbr{buffer}.txt'
-        buffer_values.append(buffer)
-        phi_values.append(0.01 * (buffer % 100))
-        minIPDT_values.append(minIPDT)
 
-    # Plotting
-    plt.plot(phi_values, minIPDT_values, marker='o', label=f'{buff_type}')
 
-# Adding labels and legend
-plt.xlabel('Phi')
-plt.ylabel('minIPDT')
-plt.legend()
+def make_plot_pls(origin, type):
+    file_data = get_data(origin, type)
+    # Extracting and plotting minIPDT values only from cbr files
+    for buff_type, data in file_data.items():
+        buffer_values = []
+        phi_values = []
+        minIPDT_values = []
 
-# Annotating each point with its corresponding x value (phi) under the X-axis
-for buff_type, data in file_data.items():
-    for i, txt in enumerate(phi_values):
-        plt.annotate(f'{txt:.2f}', (phi_values[i], 0), textcoords="offset points", xytext=(0, -15), ha='center', va='bottom')
+        for buffer, minIPDT in data:
+            file_name = f'cbr{buffer}.txt'
+            buffer_values.append(buffer)
+            phi_values.append(0.01 * (buffer % 100))
+            minIPDT_values.append(minIPDT)
 
-# Set x-axis ticks to include missing value 0.95
-plt.xticks(list(plt.xticks()[0]) + [0.95])
+        # Plotting
+        plt.plot(phi_values, minIPDT_values, marker='o', label=f'{buff_type}')
 
-plt.title('minIPDT vs Phi for Different Buffers (from cbr files only)')
-plt.show()
+    # Adding labels and legend
+    plt.xlabel('Phi')
+    plt.ylabel(type)
+    plt.legend()
+
+    # Annotating each point with its corresponding x value (phi) under the X-axis
+    for buff_type, data in file_data.items():
+        for i, txt in enumerate(phi_values):
+            plt.annotate(f'{txt:.2f}', (phi_values[i], 0), textcoords="offset points", xytext=(0, -15), ha='center', va='bottom')
+
+    # Set x-axis ticks to include missing value 0.95
+    plt.xticks(list(plt.xticks()[0]) + [0.95])
+
+    plt.title(f'{type} vs Phi for Different Buffers (from {origin} files only)')
+    save_dir = 'my_plots'
+    os.makedirs(save_dir, exist_ok=True)  # Create the directory if it doesn't exist
+
+    plt.savefig(os.path.join(save_dir, f'{origin}-{type}.png'))
+    plt.show()
+
+if __name__ == "__main__":
+
+    cbr = "cbr"
+    pois = "pois"
+    avg = "avgIPDT"
+    minn = "minIPDT"
+    iplr = "IPLR"
+    ipdv = "IPDV95"
+    
+    make_plot_pls(cbr, avg)
+    make_plot_pls(cbr, minn)
+    make_plot_pls(cbr, iplr)
+    make_plot_pls(cbr, ipdv)
+
+
+    make_plot_pls(pois, avg)
+    make_plot_pls(pois, minn)
+    make_plot_pls(pois, iplr)
+    make_plot_pls(pois, ipdv)

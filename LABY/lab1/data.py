@@ -142,3 +142,24 @@ file_data = {
         #
     }
 }
+def get_data(origin, data_type):
+    result = {}
+
+    for buffer in file_data[origin][data_type]:
+        key = buffer
+        values = [(file[0], file[1]) for file in file_data[origin][data_type][buffer]]
+        result[key] = values
+
+    return result
+
+if __name__ == "__main__":
+
+    origin = "pois"
+    data_type = "IPLR"
+
+    result = get_data(origin, data_type)
+
+    # for key, values in result.items():
+    #     print(f"{key}: {values}")
+
+    print(result)
