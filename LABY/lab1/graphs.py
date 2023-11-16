@@ -8,27 +8,6 @@ def extract_values(file_name):
     phi_value = 0.01 * int(file_name[-2:])
     return buffer_value, phi_value
 
-# Data from the provided text files
-
-# file_data = {
-#     "B10": [
-#         (1050, 0.000206803),
-#         (1080, 0.000185114),
-#         (1095, 0.000207183),
-#     ],
-#     "B30": [
-#         (3050, 0.00020668),
-#         (3080, 0.000185977),
-#         (3095, 0.000170091),
-#     ],
-#     "B100": [
-#         (10050, 0.000204663),
-#         (10080, 0.000203402),
-#         (10095, 0.000172319),
-#     ],
-# }
-
-
 
 def make_plot_pls(origin, type):
     file_data = get_data(origin, type)
@@ -39,7 +18,6 @@ def make_plot_pls(origin, type):
         minIPDT_values = []
 
         for buffer, minIPDT in data:
-            file_name = f'cbr{buffer}.txt'
             buffer_values.append(buffer)
             phi_values.append(0.01 * (buffer % 100))
             minIPDT_values.append(minIPDT)
