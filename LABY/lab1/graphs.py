@@ -38,7 +38,7 @@ def make_plot_pls(origin, type):
     # Set x-axis ticks to include missing value 0.95
     plt.xticks(list(plt.xticks()[0]) + [0.95])
 
-    plt.title(f'{type} vs Phi for Different Buffers (from {origin} files only)')
+    plt.title(f'{type} od Phi dla różnych Bufforów (pliki: {origin})')
     save_dir = 'my_plots'
     os.makedirs(save_dir, exist_ok=True)  # Create the directory if it doesn't exist
 
