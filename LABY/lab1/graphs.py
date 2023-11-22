@@ -26,17 +26,24 @@ def make_plot_pls(origin, type):
         plt.plot(phi_values, minIPDT_values, marker='o', label=f'{buff_type}')
 
     # Adding labels and legend
-    plt.xlabel('Phi')
+    plt.xlabel('Rho')
     plt.ylabel(type)
     plt.legend()
 
     # Annotating each point with its corresponding x value (phi) under the X-axis
     for buff_type, data in file_data.items():
         for i, txt in enumerate(phi_values):
-            plt.annotate(f'{txt:.2f}', (phi_values[i], 0), textcoords="offset points", xytext=(0, -15), ha='center', va='bottom')
+            plt.annotate(f'{txt:.2f}', (phi_values[i], 0), textcoords=None, xytext=(0, -15), ha='center', va='bottom')
 
     # Set x-axis ticks to include missing value 0.95
     plt.xticks(list(plt.xticks()[0]) + [0.95])
+
+    if type == iplr:
+        plt.ylim(0, 0.0155)
+    elif type == minn or type == avg:
+        plt.ylim(0, 0.0009)
+    elif type == ipdv:
+        plt.ylim(0, 0.0021)
 
     plt.title(f'{type} od Phi dla różnych Bufforów (pliki: {origin})')
     save_dir = 'my_plots'
@@ -54,13 +61,13 @@ if __name__ == "__main__":
     iplr = "IPLR"
     ipdv = "IPDV95"
     
-    make_plot_pls(cbr, avg)
-    make_plot_pls(cbr, minn)
-    make_plot_pls(cbr, iplr)
-    make_plot_pls(cbr, ipdv)
+    # make_plot_pls(cbr, avg)
+    # make_plot_pls(cbr, minn)
+    # make_plot_pls(cbr, iplr)
+    # make_plot_pls(cbr, ipdv)
 
 
-    make_plot_pls(pois, avg)
-    make_plot_pls(pois, minn)
-    make_plot_pls(pois, iplr)
-    make_plot_pls(pois, ipdv)
+    # make_plot_pls(pois, avg)
+    # make_plot_pls(pois, minn)
+    # make_plot_pls(pois, iplr)
+    # make_plot_pls(pois, ipdv)
